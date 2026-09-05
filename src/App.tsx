@@ -4,6 +4,9 @@
  */
 
 import React, { useState } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
+import { ThemeBackground } from './components/ThemeBackground';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -26,57 +29,67 @@ export default function App() {
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] flex flex-col font-sans selection:bg-amber-500/30 selection:text-white">
-      {/* Sticky Header Navigation */}
-      <Navbar
-        onOpenResume={() => setResumeModalOpen(true)}
-      />
+    <ThemeProvider>
+      <div className="min-h-screen text-stone-900 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-950 relative transition-colors duration-700">
+        
+        {/* Dynamic randomized canvas/pattern background */}
+        <ThemeBackground />
 
-      {/* Main Content Sections */}
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <Hero
+        {/* Floating Theme Customizer & Quick Randomizer */}
+        <ThemeSwitcher />
+
+        {/* Sticky Header Navigation */}
+        <Navbar
+          onOpenResume={() => setResumeModalOpen(true)}
+        />
+
+        {/* Main Content Sections */}
+        <main className="flex-grow relative z-10">
+          {/* Hero Section */}
+          <Hero
+            personalInfo={personalInfo}
+            onOpenResume={() => setResumeModalOpen(true)}
+          />
+
+          {/* About Section */}
+          <About personalInfo={personalInfo} />
+
+          {/* Work Experience Section */}
+          <Experience experiences={workExperiences} />
+
+          {/* Education & TESDA Certifications */}
+          <EducationCertifications
+            certifications={certifications}
+            personalInfo={personalInfo}
+          />
+
+          {/* Skills Section */}
+          <Skills categories={skillCategories} />
+
+          {/* Featured Project: Mind Meld 2.0 */}
+          <MindMeldProject project={mindMeldProject} />
+
+          {/* Contact Section */}
+          <Contact personalInfo={personalInfo} />
+        </main>
+
+        {/* Footer */}
+        <Footer
           personalInfo={personalInfo}
           onOpenResume={() => setResumeModalOpen(true)}
         />
 
-        {/* About Section */}
-        <About personalInfo={personalInfo} />
-
-        {/* Work Experience Section */}
-        <Experience experiences={workExperiences} />
-
-        {/* Education & TESDA Certifications */}
-        <EducationCertifications
-          certifications={certifications}
+        {/* Printable Resume Modal */}
+        <ResumeModal
+          isOpen={resumeModalOpen}
+          onClose={() => setResumeModalOpen(false)}
           personalInfo={personalInfo}
+          experiences={workExperiences}
+          certifications={certifications}
         />
-
-        {/* Skills Section */}
-        <Skills categories={skillCategories} />
-
-        {/* Featured Project: Mind Meld 2.0 */}
-        <MindMeldProject project={mindMeldProject} />
-
-        {/* Contact Section */}
-        <Contact personalInfo={personalInfo} />
-      </main>
-
-      {/* Footer */}
-      <Footer
-        personalInfo={personalInfo}
-        onOpenResume={() => setResumeModalOpen(true)}
-      />
-
-      {/* Printable Resume Modal */}
-      <ResumeModal
-        isOpen={resumeModalOpen}
-        onClose={() => setResumeModalOpen(false)}
-        personalInfo={personalInfo}
-        experiences={workExperiences}
-        certifications={certifications}
-      />
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
+
 
